@@ -38,7 +38,7 @@
 #endif
 
 #ifdef NETWORKING
-  #include <SDL/SDL_net.h>
+  #include <SDL_net.h>
 #endif
 #include "sound_stuff.h"
 #include <GL/gl.h>
