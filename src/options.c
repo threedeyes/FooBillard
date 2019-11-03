@@ -179,6 +179,8 @@ VMfloat  options_value_anisotrop = 0.0;    // the vaule for anisotropic filterin
 
 #ifdef __amigaos4__
 char   options_browser[20] = "odyssey";  // the variable to hold the standard Browser for the Manual
+#elif defined(__HAIKU__)
+char   options_browser[20] = "WebPositive";  // the variable to hold the standard Browser for the Manual
 #else
 char   options_browser[20] = "firefox";  // the variable to hold the standard Browser for the Manual
 #endif
