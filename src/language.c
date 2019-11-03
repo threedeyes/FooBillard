@@ -31,6 +31,9 @@
   #include <windows.h>
   #include <shellapi.h>
 #endif
+#ifdef __HAIKU__
+  #include <OS.h>
+#endif
 
 char localeText[MAX_TEXT_ENTRIES][MAX_TEXT_ENTRY_LEN];
 
@@ -89,6 +92,15 @@ static char *find_localized_file(const char *base_name)
       cp[0] = 0;
     }
     strcat(exe_path,"\\data\\locale\\");
+#endif
+#ifdef __HAIKU__
+	char *cp;
+	team_info info;
+	if (get_team_info(B_CURRENT_TEAM, &info) == B_OK)
+		strcpy(exe_path, info.args);
+    if((cp = strrchr(exe_path,'/')))
+		cp[0] = 0;
+	strcat(exe_path,"/data/locale/");
 #endif
 
     snprintf(full_path, sizeof(full_path), "%s%s/%s",

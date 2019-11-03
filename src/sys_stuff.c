@@ -36,6 +36,9 @@
 #else
   #include <sys/stat.h>
 #endif
+#ifdef __HAIKU__
+  #include <OS.h>
+#endif
 
 #ifdef NETWORKING
   #include <SDL_net.h>
@@ -142,6 +145,8 @@ void init_browser(void) {
     cp[0] = 0;
   }
   strcat(browser,"\\data\\");
+#elif defined(__HAIKU__)
+  sprintf(browser,"/bin/open ");
 #else
   if(!strcmp(options_browser,"browser")) {
     strcpy(options_browser,"./browser.sh");
@@ -938,7 +943,7 @@ static char data_dir[512];
 void enter_data_dir() {
     int success = 1;
 
-#if defined POSIX && !defined(__amigaos4__)
+#if defined POSIX && !defined(__amigaos4__) && !defined(__HAIKU__)
     char proc_exe[20];
     char *slash_pos;
 #endif
@@ -964,6 +969,14 @@ void enter_data_dir() {
 
         // Add "/data"
         strncpy(slash_pos, "/data", sizeof(data_dir) - (slash_pos - data_dir));
+#elif defined(__HAIKU__)
+		char *cp;
+		team_info info;
+		if (get_team_info(B_CURRENT_TEAM, &info) == B_OK)
+			strcpy(data_dir, info.args);
+		if((cp = strrchr(data_dir,'/')))
+			cp[0] = 0;
+		strcat(data_dir, "/data");
 #else
         /* ### TODO ### Get the working directory of the program
          * Mac OS X: _NSGetExecutablePath() (man 3 dyld)

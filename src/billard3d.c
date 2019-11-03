@@ -1772,6 +1772,8 @@ int load_config( char *** confv, int * confc, char ** argv, int argc )
     sprintf(filename,"%s\\.foobillardrc",getenv("USERPROFILE"));
 #elif defined (__amigaos4__)
     sprintf(filename,"%s.foobillardrc","PROGDIR:");
+#elif defined (__HAIKU__)
+	sprintf(filename,"/boot/home/config/settings/FooBillardPlus/foobillardrc");
 #else
     sprintf(filename,"%s/.foobillardrc",getenv("HOME"));
 #endif
@@ -1851,6 +1853,8 @@ void save_config(void)
     sprintf(filename,"%s\\.foobillardrc",getenv("USERPROFILE"));
 #elif defined (__amigaos4__)
     sprintf(filename,"%s.foobillardrc","PROGDIR:");
+#elif defined (__HAIKU__)
+	sprintf(filename,"/boot/home/config/settings/FooBillardPlus/foobillardrc");
 #else
     sprintf(filename,"%s/.foobillardrc",getenv("HOME"));
 #endif
@@ -2443,6 +2447,9 @@ void init_player_roster(struct PlayerRoster * roster)
 #elif defined (__amigaos4__)
     strcpy(roster->player[0].name,"AMIGA");
     strcpy(player[0].name,"AMIGA");
+#elif defined (__HAIKU__)
+    strcpy(roster->player[0].name,"User");
+    strcpy(player[0].name,"User");
 #else
     if(getenv("USER"))
         strcpy(roster->player[0].name,getenv("USER"));

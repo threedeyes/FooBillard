@@ -276,6 +276,10 @@ void init_history(void) {
    strcpy(file_name,"PROGDIR:");
    strcat(file_name,"data");
    mkdir(file_name,0777); //build directory every time is not a problem
+#elif defined (__HAIKU__)
+   strcpy(file_name,"/boot/home/config/settings");
+   strcat(file_name,"/FooBillardPlus");
+   mkdir(file_name,0777);
 #else
    strcpy(file_name,getenv("HOME"));
    strcat(file_name,"/foobillardplus-data");
