@@ -43,6 +43,10 @@
   #include <SDL_net.h>
 #endif
 
+#ifdef __HAIKU__
+#include <FindDirectory.h>
+#endif
+
 #ifdef __MINGW32__ //RB
    void ( APIENTRY * glActiveTextureARB)( GLenum );
 #endif
@@ -1773,7 +1777,12 @@ int load_config( char *** confv, int * confc, char ** argv, int argc )
 #elif defined (__amigaos4__)
     sprintf(filename,"%s.foobillardrc","PROGDIR:");
 #elif defined (__HAIKU__)
-	sprintf(filename,"/boot/home/config/settings/FooBillardPlus/foobillardrc");
+	static char settingsDir[PATH_MAX] = "";
+	if (find_directory(B_USER_SETTINGS_DIRECTORY, -1, false, settingsDir, sizeof(settingsDir)) == B_OK) {
+		sprintf(filename,"%s/FooBillardPlus/foobillardrc", settingsDir);
+	} else {
+		sprintf(filename,"/boot/home/config/settings/FooBillardPlus/foobillardrc");
+	}
 #else
     sprintf(filename,"%s/.foobillardrc",getenv("HOME"));
 #endif
@@ -1854,7 +1863,12 @@ void save_config(void)
 #elif defined (__amigaos4__)
     sprintf(filename,"%s.foobillardrc","PROGDIR:");
 #elif defined (__HAIKU__)
-	sprintf(filename,"/boot/home/config/settings/FooBillardPlus/foobillardrc");
+	static char settingsDir[PATH_MAX] = "";
+	if (find_directory(B_USER_SETTINGS_DIRECTORY, -1, false, settingsDir, sizeof(settingsDir)) == B_OK) {
+		sprintf(filename,"%s/FooBillardPlus/foobillardrc", settingsDir);
+	} else {
+		sprintf(filename,"/boot/home/config/settings/FooBillardPlus/foobillardrc");
+	}
 #else
     sprintf(filename,"%s/.foobillardrc",getenv("HOME"));
 #endif

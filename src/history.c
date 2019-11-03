@@ -35,6 +35,9 @@
 #else
   #include <time.h>
 #endif
+#ifdef __HAIKU__
+#include <FindDirectory.h>
+#endif
 #include "language.h"
 #include "billmove.h"
 #include "history.h"
@@ -277,8 +280,12 @@ void init_history(void) {
    strcat(file_name,"data");
    mkdir(file_name,0777); //build directory every time is not a problem
 #elif defined (__HAIKU__)
-   strcpy(file_name,"/boot/home/config/settings");
-   strcat(file_name,"/FooBillardPlus");
+   static char settingsDir[PATH_MAX] = "";
+   if (find_directory(B_USER_SETTINGS_DIRECTORY, -1, false, settingsDir, sizeof(settingsDir)) == B_OK) {
+      sprintf(file_name,"%s/FooBillardPlus", settingsDir);
+   } else {
+      sprintf(file_name,"/boot/home/config/settings/FooBillardPlus");
+   }
    mkdir(file_name,0777);
 #else
    strcpy(file_name,getenv("HOME"));
