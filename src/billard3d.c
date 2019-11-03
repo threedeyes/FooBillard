@@ -249,7 +249,7 @@ VMfloat g_motion_ratio=1.0;  /* a shot to be due at the beginning */
   static int wait_server = 0;        // wait for server connect from client = 1
   static int init_netserver = 0;     // call a host net-game on 1
   static int active_net_game = 0;    // 1 if network game is active and 0 if not
-  static int send_data = 0;          // 0 no data send, != 0 data to send
+  static int send_data_cnt = 0;      // 0 no data send, != 0 data to send
   static int get_data = 0;           // 0 no data to get != data get
   static int netorder=0;             // the order 0 = nothing, 1 = end
   static int data_len;               // the length of network sended data and for the pointer bug in some gcc
@@ -1121,7 +1121,7 @@ Uint32 net_get_timer(Uint32 intervall, void *param) {
 
 Uint32 net_send_timer(Uint32 intervall, void *param) {
     // param not used, but a must have for SDL_AddTimer
-    send_data++;
+    send_data_cnt++;
     return(intervall);
 }
 
@@ -1200,13 +1200,13 @@ static void play_network(void)
          active_net_timer = NULL;
         }
         get_data = 0;
-     } else if(send_data) {
+     } else if(send_data_cnt) {
         net_send_data();
         if(netorder && active_net_timer !=NULL) {
          SDL_RemoveTimer(active_net_timer);
          active_net_timer = NULL;
         }
-        send_data = 0;
+        send_data_cnt = 0;
      }
   } // active_game end
 
