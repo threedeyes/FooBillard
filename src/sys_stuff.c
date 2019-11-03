@@ -971,9 +971,13 @@ void enter_data_dir() {
         strncpy(slash_pos, "/data", sizeof(data_dir) - (slash_pos - data_dir));
 #elif defined(__HAIKU__)
 		char *cp;
+		char *binfile;
 		team_info info;
-		if (get_team_info(B_CURRENT_TEAM, &info) == B_OK)
-			strcpy(data_dir, info.args);
+		if (get_team_info(B_CURRENT_TEAM, &info) == B_OK) {
+			binfile = realpath(info.args, NULL);
+			strcpy(data_dir, binfile);
+			free(binfile);
+		}
 		if((cp = strrchr(data_dir,'/')))
 			cp[0] = 0;
 		strcat(data_dir, "/data");

@@ -95,9 +95,13 @@ static char *find_localized_file(const char *base_name)
 #endif
 #ifdef __HAIKU__
 	char *cp;
+	char *binfile;
 	team_info info;
-	if (get_team_info(B_CURRENT_TEAM, &info) == B_OK)
-		strcpy(exe_path, info.args);
+	if (get_team_info(B_CURRENT_TEAM, &info) == B_OK) {
+		binfile = realpath(info.args, NULL);
+		strcpy(exe_path, binfile);
+		free(binfile);
+	}
     if((cp = strrchr(exe_path,'/')))
 		cp[0] = 0;
 	strcat(exe_path,"/data/locale/");
