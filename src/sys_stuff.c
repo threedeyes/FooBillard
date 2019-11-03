@@ -943,7 +943,7 @@ static char data_dir[512];
 void enter_data_dir() {
     int success = 1;
 
-#if defined POSIX && !defined(__amigaos4__) && !defined(__HAIKU__)
+#if defined POSIX && !defined(__amigaos4__)
     char proc_exe[20];
     char *slash_pos;
 #endif
@@ -951,7 +951,7 @@ void enter_data_dir() {
     do {
         success = 0;
 
-#if defined POSIX && !defined(__amigaos4__)
+#if defined POSIX && !defined(__amigaos4__) && !defined(__HAIKU__)
         snprintf(proc_exe, sizeof(proc_exe), "/proc/%d/exe", getpid());
         if (readlink(proc_exe, data_dir, sizeof(data_dir)) < 0) {
             perror("readlink failed");
