@@ -200,9 +200,14 @@ void launch_manual()
             if (!strcmp(options_browser, "browser")) {
                 strcpy(options_browser, "./browser.sh");
             }
+#ifdef __HAIKU__
+            snprintf(command, sizeof(command),
+                "links -g file:///%s", manual_file);
+#else
             snprintf(command, sizeof(command),
                 "%s file://%s/%s",
                 options_browser, get_data_dir(), manual_file);
+#endif
             break;
     }
 
